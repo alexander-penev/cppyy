@@ -3,8 +3,7 @@ from pytest import raises
 from .support import setup_make, pylong, maxvalue
 
 currpath = py.path.local(__file__).dirpath()
-test_dct = str(currpath.join("operatorsDict.so"))
-test_h = str(currpath.join("operators.h"))
+test_dct = str(currpath.join("operatorsDict"))
 
 def setup_module(mod):
     setup_make("operators")
@@ -13,10 +12,8 @@ def setup_module(mod):
 class TestOPERATORS:
     def setup_class(cls):
         cls.test_dct = test_dct
-        cls.test_h = test_h
         import cppyy
-        cls.operators = cppyy.load_library(cls.test_dct)
-        cppyy.include(cls.test_h)
+        cls.operators = cppyy.load_reflection_info(cls.test_dct)
         cls.N = cppyy.gbl.N
 
     def teardown_method(self, meth):
